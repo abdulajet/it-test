@@ -1,0 +1,35 @@
+name: Build and Deploy Tutorial
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    env:
+      VONAGE_API_KEY: 'febe6726'
+      VCR_REGION: 'euw1'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@4
+        
+      - name: Install Cloud Runtime CLI
+        uses: Vonage/cloud-runtime-cli@main
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.4
+          cache: npm
+
+      - name: Install Dependencies
+        run: |
+          node -v
+          npm -v
+          npm install 
+
+      - name: Run Build
+        run: |
+          npm run build 
