@@ -83,8 +83,8 @@ jobs:
       - name: Deploy
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
-          output=$(vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql)
-          url=$(echo "$output" | grep -oP 'https://neru-\S+')
+          vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql > output.txt
+          url=$(grep -oP 'https://neru-\S+' output.txt)
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
 
