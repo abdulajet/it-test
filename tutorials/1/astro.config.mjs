@@ -4,6 +4,7 @@ import myIntegration from './my-toolbar-app/my-integration.ts';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'static',
   integrations: [
     myIntegration,
     starlight({
