@@ -94,8 +94,8 @@ jobs:
         with:
           script: |
             await github.rest.issues.createComment({
-              context.repo.owner,
-              context.repo.repo,
-              context.issue.number,
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               body: 'Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }}'
             });
