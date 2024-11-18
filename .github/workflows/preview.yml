@@ -24,7 +24,7 @@ jobs:
         id: get-changed-files
         uses: tj-actions/changed-files@v45
 
-      - name: Get changed colder
+      - name: Get changed folder
         id: get-changed-folder
         env:
           ALL_CHANGED_FILES: ${{ steps.get-changed-files.outputs.all_changed_files }}
@@ -89,10 +89,10 @@ jobs:
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
       - name: Leave comment on PR
-        uses: peter-evans/create-or-update-comment@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body: "Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }}"
+          body: "Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }} "
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
