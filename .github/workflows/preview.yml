@@ -71,11 +71,11 @@ jobs:
           rm -rf dist
           cp -r ../../DummyServer/* .
 
-          VALUE=$(jq -r '.slug' tutorial-config.json)
-          sed -i "s/<NAME>/$VALUE-preview/g" vcr.yml
+          NAME=$(jq -r '.slug' tutorial-config.json)
+          sed -i "s/<NAME>/$NAME/g" vcr.yml
+          sed -i "s/<ENV>/preview/g" vcr.yml
 
           cat vcr.yml
-          
 
       - name: Install Cloud Runtime CLI
         uses: Vonage/cloud-runtime-cli@main
@@ -83,6 +83,8 @@ jobs:
       - name: Deploy
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
-          vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql
+          output=$(vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql)
+          url=$(echo "$output" | grep -oP 'https://neru-\S+')
+          echo "url=$url" >> "$GITHUB_OUTPUT"
 
 
