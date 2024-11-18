@@ -86,6 +86,7 @@ jobs:
         run: |
           vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql 2>&1 | tee deploy-vcr-logs.log
           url=$(grep -oP 'https://neru-\S+' deploy-vcr-logs.log)
+          echo $url
           echo "url=$url" >> "$GITHUB_OUTPUT"
 
       - name: Leave comment on PR
