@@ -93,7 +93,8 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          body: "Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }} "
+          body: |
+          Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }} 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
