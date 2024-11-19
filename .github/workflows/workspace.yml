@@ -129,7 +129,7 @@ jobs:
           directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
           path: "."
           filename: "ws.zip"
-          exclusions: "tutorial-config.json, createworkspace.sh"
+          exclusions: "tutorial-config.json createworkspace.sh"
 
       - name: Upload a Build Artifact
         id: upload-release-artifact
