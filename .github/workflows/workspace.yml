@@ -71,7 +71,7 @@ jobs:
           git push
           git push origin $TAG_NAME
 
-          echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Zip Workspace
         uses: TheDoctor0/zip-release@0.7.6
