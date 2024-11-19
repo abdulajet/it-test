@@ -77,18 +77,30 @@ jobs:
 
           cat vcr.yml
 
-      # handle updates here: nuke ws folder and recreate
+      - name: Install Cloud Runtime CLI
+        uses: Vonage/cloud-runtime-cli@main
+
+      - name: Deploy
+        id: deploy
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}/server
+        run: |
+          vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql 2>&1 | tee deploy-vcr-logs.log
+          url=$(grep -oP 'https://neru-\S+' deploy-vcr-logs.log)
+          sanitized_url=$(echo "$url" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
+          echo "url=$sanitized_url" >> "$GITHUB_OUTPUT"
+
       - name: Create Workspace Folder
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
-          mkdir ws
+          rm -rf server ws
+          mkdir -p ws
           cd ws
           pwd
           cp ../tutorial-config.json .
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls -a
-          ./createworkspace.sh
+          ./createworkspace.sh ${{ steps.deploy.outputs.url }}
 
       # - name: Tag the commit
       #   id: tag-commit
