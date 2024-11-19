@@ -13,7 +13,7 @@ npm create astro@latest -- --template starlight
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-## 🚀 Project Structure
+## 🚀 Project Structure 
 
 
 ```
