@@ -91,6 +91,7 @@ jobs:
       - name: Create release assets
         uses: ncipollo/release-action@v1
         with:
+          name: Release ${{ steps.tag-commit.outputs.tag_name }}
           artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"
-          body: https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
-          tag: refs/tags/${{ steps.tag-commit.outputs.tag_name }}
+          body: Download and Upload the ws.zip file to Code Hub now.
+          tag: ${{ steps.tag-commit.outputs.tag_name }}
