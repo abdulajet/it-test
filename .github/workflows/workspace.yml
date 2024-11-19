@@ -62,7 +62,7 @@ jobs:
 
           slug=$(jq -r '.slug' tutorial-config.json)
           version=$(jq -r '.version' tutorial-config.json)
-          TAG_NAME=${slug}-v${version}"
+          TAG_NAME="${slug}-v${version}"
 
           echo $TAG_NAME
 
