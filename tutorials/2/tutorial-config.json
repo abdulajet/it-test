@@ -1,0 +1,14 @@
+{
+    "title": "This is a test tutorial",
+    "slug": "this-is-a-test-tutorial",
+    "files": [
+      "index.html",
+      "script.js",
+      "styles.css"
+    ],
+    "panels": [
+      "terminal",
+      "browser"
+    ],
+    "version": "1"
+}
