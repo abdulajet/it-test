@@ -68,7 +68,7 @@ jobs:
           git tag -a $TAG_NAME -m "Tagging commit for version ${TAG_NAME}"
 
           git push
-          git push origin TAG_NAME
+          git push origin $TAG_NAME
 
       - name: Zip Release
         id: zip-release
