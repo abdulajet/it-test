@@ -71,7 +71,7 @@ jobs:
 
           NAME=$(jq -r '.slug' ../tutorial-config.json)
           VERSION=$(jq -r '.version' ../tutorial-config.json)
-          VERSION=${VERSION//./_}
+          VERSION=${VERSION//./-}
           sed -i "s/<NAME>/$NAME/g" vcr.yml
           sed -i "s/<ENV>/$VERSION/g" vcr.yml
 

@@ -15,7 +15,7 @@ npm create astro@latest -- --template starlight
 
 ## 🚀 Project Structure 
 
-
+ 
 ```
 .
 ├── public/
