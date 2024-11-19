@@ -48,7 +48,7 @@ jobs:
           mkdir ws
           cd ws
           pwd
-          cp ../tutorial-config.json.
+          cp ../tutorial-config.json .
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls -a
