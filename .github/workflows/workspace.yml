@@ -48,8 +48,8 @@ jobs:
           pwd
           mkdir ws
           cd ws
-          cp -r ../DummyWorkspace/. .
-          cp ../createworkspace.sh
+          cp -r ../../DummyWorkspace/. .
+          cp ../../createworkspace.sh
           ls
 
       # - name: Run build
