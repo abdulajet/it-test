@@ -45,11 +45,11 @@ jobs:
       - name: Create Workspace Folder
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
-          pwd
           mkdir ws
           cd ws
-          cp -r ../../DummyWorkspace/. .
-          cp ../../createworkspace.sh
+          pwd
+          cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
+          cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls
 
       # - name: Run build
