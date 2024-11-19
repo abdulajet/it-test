@@ -71,7 +71,7 @@ jobs:
 
           NAME=$(jq -r '.slug' ../tutorial-config.json)
           VERSION=$(jq -r '.version' ../tutorial-config.json)
-          VERSION=${VERSION//./_}
+          VERSION=${VERSION//./-}
           sed -i "s/<NAME>/$NAME/g" vcr.yml
           sed -i "s/<ENV>/$VERSION/g" vcr.yml
 
@@ -129,7 +129,7 @@ jobs:
           directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
           path: "."
           filename: "ws.zip"
-          exclusions: "tutorial-config.json, createworkspace.sh"
+          exclusions: "tutorial-config.json createworkspace.sh"
 
       - name: Upload a Build Artifact
         id: upload-release-artifact
