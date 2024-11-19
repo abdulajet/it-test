@@ -70,14 +70,6 @@ jobs:
         with:
           path: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"
 
-      - name: Output Artifact ID
-        run: echo 'Artifact ID is ${{ steps.upload-release-artifact.outputs.artifact-id }}'
-
-      - name: Create release from artifact
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"
-
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
       #   run: |
