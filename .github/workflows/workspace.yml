@@ -28,7 +28,7 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.get-changed-files.outputs.all_changed_files }}
         run: |
-          first_file=$(echo "$ALL_CHANGED_FILES" | awk '{print $1}')
+          first_file=$(echo "$ALL_CHANGED_FILES" | tr ' ' '\n' | grep "tutorials" | head -n 1)
           top_level_dir=$(echo "$first_file" | cut -d'/' -f1,2)
           echo "dir=$top_level_dir" >> "$GITHUB_OUTPUT"
 
