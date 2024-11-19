@@ -4,7 +4,7 @@
         "setup.json": true,
         "vcr.yml": true,
     },
-    "vs-browser.url": "https://neru-febe6726-sms-onboarding-11-1-2.euw1.runtime.vonage.cloud",
+    "vs-browser.url": "https://neru-febe6726-sms-onboarding-12.euw1.runtime.vonage.cloud",
     "vs-browser.reload.onSave": false,
     "workbench.startupEditor": "none"
 }
