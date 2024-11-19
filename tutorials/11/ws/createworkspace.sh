@@ -18,6 +18,7 @@ fi
 # Read JSON configuration
 SLUG=$(jq -r '.slug' "$CONFIG_FILE")
 VERSION=$(jq -r '.version' "$CONFIG_FILE")
+FILES=$(jq -r '.files[]' "$CONFIG_FILE")
 OPEN_FILE=$(jq -r '.openFile' "$CONFIG_FILE")
 
 # Create files from the "files" array
