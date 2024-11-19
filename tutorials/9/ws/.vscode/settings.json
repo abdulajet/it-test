@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/.DS_Store": true,
+        "setup.json": true,
+        "vcr.yml": true,
+    },
+    "vs-browser.url": "https://neru-febe6726-sms-onboarding-9.euw1.runtime.vonage.cloud",
+    "vs-browser.reload.onSave": false,
+    "workbench.startupEditor": "none"
+}
