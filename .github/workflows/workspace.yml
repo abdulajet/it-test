@@ -3,12 +3,12 @@ name: Create Tutorial Workspace
 on:
   pull_request:
     branches: ["main"]
-    types:
-      - closed
+    types: [opened, synchronize, reopened]
+      # - closed
 
 jobs:
   create-workspace:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     env:
@@ -41,6 +41,42 @@ jobs:
             exit 1
           fi
 
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.4
+
+      - name: Install dependencies
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          node -v
+          npm -v
+          npm install
+
+      - name: Run build
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          pwd
+          npm run build
+
+      - name: Prep deploy
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          mkdir -p server
+          cd server
+          cp -r ../dist/* ./public
+          rm -rf ../dist
+          cp -r $GITHUB_WORKSPACE/DummyServer/* .
+
+          NAME=$(jq -r '.slug' ../tutorial-config.json)
+          VERSION=$(jq -r '.version' ../tutorial-config.json)
+          VERSION=${VERSION//./_}
+          sed -i "s/<NAME>/$NAME/g" vcr.yml
+          sed -i "s/<ENV>/$VERSION/g" vcr.yml
+
+          cat vcr.yml
+
+      # handle updates here: nuke ws folder and recreate
       - name: Create Workspace Folder
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
@@ -53,45 +89,45 @@ jobs:
           ls -a
           ./createworkspace.sh
 
-      - name: Tag the commit
-        id: tag-commit
-        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add --all
+      # - name: Tag the commit
+      #   id: tag-commit
+      #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+      #   run: |
+      #     git config user.name "GitHub Actions"
+      #     git config user.email "actions@github.com"
+      #     git add --all
 
-          slug=$(jq -r '.slug' tutorial-config.json)
-          version=$(jq -r '.version' tutorial-config.json)
-          TAG_NAME="${slug}-v${version}"
+      #     slug=$(jq -r '.slug' tutorial-config.json)
+      #     version=$(jq -r '.version' tutorial-config.json)
+      #     TAG_NAME="${slug}-v${version}"
 
-          git commit -m "Adding workspace for ${TAG_NAME}"
-          git tag -a $TAG_NAME -m "Tagging commit for version ${TAG_NAME}"
+      #     git commit -m "Adding workspace for ${TAG_NAME}"
+      #     git tag -a $TAG_NAME -m "Tagging commit for version ${TAG_NAME}"
 
-          git push
-          git push origin $TAG_NAME
+      #     git push
+      #     git push origin $TAG_NAME
 
-          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+      #     echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
-      - name: Zip Workspace
-        uses: TheDoctor0/zip-release@0.7.6
-        with:
-          type: "zip"
-          directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
-          path: "."
-          filename: "ws.zip"
-          exclusions: "tutorial-config.json, createworkspace.sh"
+      # - name: Zip Workspace
+      #   uses: TheDoctor0/zip-release@0.7.6
+      #   with:
+      #     type: "zip"
+      #     directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
+      #     path: "."
+      #     filename: "ws.zip"
+      #     exclusions: "tutorial-config.json, createworkspace.sh"
 
-      - name: Upload a Build Artifact
-        id: upload-release-artifact
-        uses: actions/upload-artifact@v4.0.0
-        with:
-          path: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"    
+      # - name: Upload a Build Artifact
+      #   id: upload-release-artifact
+      #   uses: actions/upload-artifact@v4.0.0
+      #   with:
+      #     path: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"    
 
-      - name: Create release assets
-        uses: ncipollo/release-action@v1
-        with:
-          name: Release ${{ steps.tag-commit.outputs.tag_name }}
-          artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"
-          body: Download and Upload the ws.zip file to Code Hub now.
-          tag: ${{ steps.tag-commit.outputs.tag_name }}
+      # - name: Create release assets
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     name: Release ${{ steps.tag-commit.outputs.tag_name }}
+      #     artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"
+      #     body: Download and Upload the ws.zip file to Code Hub now.
+      #     tag: ${{ steps.tag-commit.outputs.tag_name }}
