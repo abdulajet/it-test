@@ -3,7 +3,6 @@ name: Create Tutorial Workspace
 on:
   pull_request:
     branches: ["main"]
-    types:
       - closed
 
 jobs:
@@ -41,17 +40,66 @@ jobs:
             exit 1
           fi
 
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.4
+
+      - name: Install dependencies
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          node -v
+          npm -v
+          npm install
+
+      - name: Run build
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          pwd
+          npm run build
+
+      - name: Prep deploy
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        run: |
+          mkdir -p server
+          cd server
+          mkdir -p ./public
+          cp -r ../dist/* ./public
+          rm -rf ../dist
+          cp -r $GITHUB_WORKSPACE/DummyServer/* .
+
+          NAME=$(jq -r '.slug' ../tutorial-config.json)
+          VERSION=$(jq -r '.version' ../tutorial-config.json)
+          VERSION=${VERSION//./_}
+          sed -i "s/<NAME>/$NAME/g" vcr.yml
+          sed -i "s/<ENV>/$VERSION/g" vcr.yml
+
+          cat vcr.yml
+
+      - name: Install Cloud Runtime CLI
+        uses: Vonage/cloud-runtime-cli@main
+
+      - name: Deploy
+        id: deploy
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}/server
+        run: |
+          vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql 2>&1 | tee deploy-vcr-logs.log
+          url=$(grep -oP 'https://neru-\S+' deploy-vcr-logs.log)
+          sanitized_url=$(echo "$url" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
+          echo "url=$sanitized_url" >> "$GITHUB_OUTPUT"
+
       - name: Create Workspace Folder
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         run: |
-          mkdir ws
+          rm -rf server ws
+          mkdir -p ws
           cd ws
           pwd
           cp ../tutorial-config.json .
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls -a
-          ./createworkspace.sh
+          ./createworkspace.sh ${{ steps.deploy.outputs.url }}
 
       - name: Tag the commit
         id: tag-commit

@@ -1,6 +1,13 @@
 #!/bin/bash
 
+URL=$1
 CONFIG_FILE="tutorial-config.json"
+
+# Ensure URL is passed as an argument
+if [ -z "$1" ]; then
+    echo "Error: URL must be provided as a parameter. Aborting."
+    exit 1
+fi
 
 # Check if CONFIG_FILE exists
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -12,8 +19,6 @@ fi
 SLUG=$(jq -r '.slug' "$CONFIG_FILE")
 VERSION=$(jq -r '.version' "$CONFIG_FILE")
 OPEN_FILE=$(jq -r '.openFile' "$CONFIG_FILE")
-
-URL="https://neru-febe6726-${SLUG}-${VERSION}.euw1.runtime.vonage.cloud"
 
 # Create files from the "files" array
 for FILE in $FILES; do
