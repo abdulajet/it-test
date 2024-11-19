@@ -47,8 +47,10 @@ jobs:
         run: |
           pwd
           mkdir ws
-          npm -v
-          npm install
+          cd ws
+          cp -r ../DummyWorkspace/. .
+          cp ../createworkspace.sh
+          ls
 
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
