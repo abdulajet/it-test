@@ -1,18 +1,19 @@
 #!/bin/bash
 
-# Check if the URL argument is provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <URL>"
+CONFIG_FILE="tutorial-config.json"
+
+# Check if CONFIG_FILE exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Configuration file $CONFIG_FILE not found. Aborting."
     exit 1
 fi
 
-URL=$1
-CONFIG_FILE="tutorial-config.json"
-
 # Read JSON configuration
-FILES=$(jq -r '.files[]' "$CONFIG_FILE")
-PANELS=$(jq -r '.panels[]' "$CONFIG_FILE")
+SLUG=$(jq -r '.slug' "$CONFIG_FILE")
+VERSION=$(jq -r '.version' "$CONFIG_FILE")
 OPEN_FILE=$(jq -r '.openFile' "$CONFIG_FILE")
+
+URL="https://neru-febe6726-${SLUG}-${VERSION}.euw1.runtime.vonage.cloud"
 
 # Create files from the "files" array
 for FILE in $FILES; do
@@ -23,29 +24,6 @@ for FILE in $FILES; do
         echo "File already exists: $FILE"
     fi
 done
-
-# Determine dependencies based on panels
-TASK_DEPENDENCIES=("ExportEnv" "CleanUp")
-if echo "$PANELS" | grep -q "browser"; then
-    TASK_DEPENDENCIES+=("OpenBrowser")
-fi
-if echo "$PANELS" | grep -q "terminal"; then
-    TASK_DEPENDENCIES+=("OpenTerminal")
-fi
-
-# Generate the "dependsOn" array
-DEPENDS_ON=$(printf '"%s",' "${TASK_DEPENDENCIES[@]}")
-DEPENDS_ON="[${DEPENDS_ON%,}]"
-
-# Update tasks.json using a temporary file
-TASKS_FILE=".vscode/tasks.json"
-if [ -f "$TASKS_FILE" ]; then
-    TEMP_FILE=$(mktemp)
-    sed "s|<TASKS>|$DEPENDS_ON|" "$TASKS_FILE" > "$TEMP_FILE" && mv "$TEMP_FILE" "$TASKS_FILE"
-    echo "Updated $TASKS_FILE with dependencies: $DEPENDS_ON"
-else
-    echo "$TASKS_FILE not found."
-fi
 
 # Update settings.json using a temporary file
 SETTINGS_FILE=".vscode/settings.json"
