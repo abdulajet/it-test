@@ -37,7 +37,12 @@
     },
     {
       "label": "Run",
-      "dependsOn": <TASKS>,
+      "dependsOn": [
+        "ExportEnv",
+        "OpenBroswer",
+        "OpenTerminal",
+        "CleanUp"
+      ],
       "dependsOrder": "sequence",
       "runOptions": {
         "runOn": "folderOpen"
