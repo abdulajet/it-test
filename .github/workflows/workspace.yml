@@ -50,7 +50,8 @@ jobs:
           pwd
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
-          ls
+          ls -a
+          sh ./createworkspace.sh
 
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
