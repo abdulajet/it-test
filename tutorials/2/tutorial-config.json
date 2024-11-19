@@ -6,6 +6,7 @@
       "script.js",
       "styles.css"
     ],
+    "openFile": "index.html",
     "panels": [
       "terminal",
       "browser"

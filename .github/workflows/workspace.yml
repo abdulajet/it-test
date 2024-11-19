@@ -54,6 +54,33 @@ jobs:
           ls -a
           ./createworkspace.sh https://google.com
 
+      - name: Zip Release
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        id: zip-release
+        uses: TheDoctor0/zip-release@0.7.6
+        with:
+          type: "zip"
+          directory: "."
+          path: "."
+          filename: "release.zip"
+          exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
+
+      - name: Upload a Build Artifact
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        id: upload-release-artifact
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          path: "./release.zip"
+
+      - name: Output Artifact ID
+        run: echo 'Artifact ID is ${{ steps.upload-release-artifact.outputs.artifact-id }}'
+
+      - name: Create release from artifact
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./release.zip"
+
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
       #   run: |
