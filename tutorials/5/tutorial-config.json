@@ -1,0 +1,15 @@
+{
+    "title": "sms onboarding",
+    "slug": "sms-onboarding",
+    "files": [
+      "index.html",
+      "script.js",
+      "styles.css"
+    ],
+    "openFile": "index.html",
+    "panels": [
+      "terminal",
+      "browser"
+    ],
+    "version": "2"
+}

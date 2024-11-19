@@ -93,4 +93,4 @@ jobs:
         with:
           artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"
           body: 'https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}'
-          tag: ${{ steps.tag-commit.outputs.tag_name }}
+          tag: refs/tags/${{ steps.tag-commit.outputs.tag_name }}
