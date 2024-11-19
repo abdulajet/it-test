@@ -65,20 +65,18 @@ jobs:
           exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
 
       - name: Upload a Build Artifact
-        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         id: upload-release-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          path: "./release.zip"
+          path: "${{ steps.get-changed-folder.outputs.dir }}/release.zip"
 
       - name: Output Artifact ID
         run: echo 'Artifact ID is ${{ steps.upload-release-artifact.outputs.artifact-id }}'
 
       - name: Create release from artifact
-        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "./release.zip"
+          artifacts: "${{ steps.get-changed-folder.outputs.dir }}/release.zip"
 
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
