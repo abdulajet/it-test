@@ -59,11 +59,10 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.6
         with:
           type: "zip"
-          directory: "."
+          directory: "${{ steps.get-changed-folder.outputs.dir }}"
           path: "."
           filename: "release.zip"
           exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
-        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
 
       - name: Upload a Build Artifact
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
