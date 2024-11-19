@@ -59,7 +59,7 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.6
         with:
           type: "zip"
-          directory: "${{ steps.get-changed-folder.outputs.dir }}"
+          directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
           path: "."
           filename: "release.zip"
           exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
@@ -68,7 +68,7 @@ jobs:
         id: upload-release-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          path: "${{ steps.get-changed-folder.outputs.dir }}/release.zip"
+          path: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"
 
       - name: Output Artifact ID
         run: echo 'Artifact ID is ${{ steps.upload-release-artifact.outputs.artifact-id }}'
@@ -76,7 +76,7 @@ jobs:
       - name: Create release from artifact
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{ steps.get-changed-folder.outputs.dir }}/release.zip"
+          artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"
 
       # - name: Run build
       #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
