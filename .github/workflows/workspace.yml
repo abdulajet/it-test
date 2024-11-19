@@ -55,7 +55,6 @@ jobs:
           ./createworkspace.sh https://google.com
 
       - name: Zip Release
-        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
         id: zip-release
         uses: TheDoctor0/zip-release@0.7.6
         with:
@@ -64,6 +63,7 @@ jobs:
           path: "."
           filename: "release.zip"
           exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
+        working-directory: ${{ steps.get-changed-folder.outputs.dir }}
 
       - name: Upload a Build Artifact
         working-directory: ${{ steps.get-changed-folder.outputs.dir }}
