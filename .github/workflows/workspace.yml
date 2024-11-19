@@ -7,7 +7,7 @@ on:
       - closed
 
 jobs:
-  deploy-preview:
+  create-workspace:
     if: contains(github.event.pull_request.labels.*.name, 'Workspace')
     runs-on: ubuntu-latest
 

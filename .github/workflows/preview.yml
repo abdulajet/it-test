@@ -5,11 +5,10 @@ on:
     branches: ["main"]
     types:
       - labeled
-      - synchronize
 
 jobs:
   deploy-preview:
-    if: contains(github.event.pull_request.labels.*.name, 'Preview')
+    if: github.event.action == 'labeled' && github.event.label.name == 'Preview'
     runs-on: ubuntu-latest
 
     env:
