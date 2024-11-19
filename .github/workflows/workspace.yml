@@ -88,17 +88,9 @@ jobs:
         with:
           path: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"    
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ steps.tag-commit.outputs.tag_name }}
-          release_name: Release ${{ steps.tag-commit.outputs.tag_name }}
-          body: |
-            https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}
-          draft: false
-          prerelease: false
-      - name: Upload release assets
+      - name: Create release assets
         uses: ncipollo/release-action@v1
         with:
           artifacts: "${{ steps.get-changed-folder.outputs.dir }}/ws/ws.zip"
+          body: 'https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}'
+          tag: ${{ steps.tag-commit.outputs.tag_name }}
