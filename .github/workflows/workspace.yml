@@ -52,7 +52,7 @@ jobs:
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls -a
-          ./createworkspace.sh https://google.com //TODO move link generation into script
+          ./createworkspace.sh https://google.com
 
       - name: Zip Release
         id: zip-release
