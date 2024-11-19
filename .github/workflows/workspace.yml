@@ -8,7 +8,7 @@ on:
 
 jobs:
   create-workspace:
-    if: contains(github.event.pull_request.labels.*.name, 'Workspace')
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     env:
