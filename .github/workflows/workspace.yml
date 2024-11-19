@@ -52,7 +52,7 @@ jobs:
           cp -r $GITHUB_WORKSPACE/DummyWorkspace/. .
           cp $GITHUB_WORKSPACE/createworkspace.sh .
           ls -a
-          ./createworkspace.sh https://google.com
+          ./createworkspace.sh https://google.com //TODO move link generation into script
 
       - name: Zip Release
         id: zip-release
@@ -62,57 +62,23 @@ jobs:
           directory: "${{ steps.get-changed-folder.outputs.dir }}/ws"
           path: "."
           filename: "release.zip"
-          exclusions: "*.git* .git/* *.DS_Store .env create_package.sh .gitignore *.log .github/* .vcr/*"
+          exclusions: "tutorial-config.json"
 
       - name: Upload a Build Artifact
         id: upload-release-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          path: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"
+          path: "${{ steps.get-changed-folder.outputs.dir }}/ws/release.zip"      
 
-      # - name: Run build
-      #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
-      #   run: |
-      #     pwd
-      #     npm run build
+      - name: Leave comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const artifactURL = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
 
-      # - name: Prep deploy
-      #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
-      #   run: |
-      #     shopt -s extglob
-      #     rm -rf !(dist|tutorial-config.json)
-      #     mkdir -p ./public
-      #     cp -r ./dist/* ./public
-      #     rm -rf dist
-      #     cp -r ../../DummyServer/* .
-
-      #     NAME=$(jq -r '.slug' tutorial-config.json)
-      #     VERSION=$(jq -r '.version' tutorial-config.json)
-      #     sed -i "s/<NAME>/$NAME/g" vcr.yml
-      #     sed -i "s/<ENV>/$VERSION/g" vcr.yml
-
-      #     cat vcr.yml
-
-      # - name: Install Cloud Runtime CLI
-      #   uses: Vonage/cloud-runtime-cli@main
-
-      # - name: Deploy
-      #   id: deploy
-      #   working-directory: ${{ steps.get-changed-folder.outputs.dir }}
-      #   run: |
-      #     vcr deploy --api-key ${{env.VONAGE_API_KEY}} --api-secret ${{ secrets.VONAGE_API_SECRET }} --region aws.${{env.VCR_REGION}} --graphql-endpoint https://graphql.${{env.VCR_REGION}}.runtime.vonage.cloud/v1/graphql 2>&1 | tee deploy-vcr-logs.log
-      #     url=$(grep -oP 'https://neru-\S+' deploy-vcr-logs.log)
-      #     sanitized_url=$(echo "$url" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
-      #     echo "url=$sanitized_url" >> "$GITHUB_OUTPUT"
-      
-
-      # - name: Leave comment on PR
-      #   uses: actions/github-script@v7
-      #   with:
-      #     script: |
-      #       await github.rest.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: 'Your Tutorial Preview has been deployed: ${{ steps.deploy.outputs.url }}'
-      #       });
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Your artifact is ready: [Download it here](${artifactURL})`
+            });
