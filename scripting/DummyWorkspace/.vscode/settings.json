@@ -1,6 +1,7 @@
 {
     "files.exclude": {
         "**/.DS_Store": true,
+        ".vscode/": true,
         "setup.json": true,
         "vcr.yml": true,
     },
