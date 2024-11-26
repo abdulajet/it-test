@@ -2,11 +2,12 @@
   "title": "Messages API - SMS",
   "slug": "messages-api-sms",
   "files": [
-    "send-sms.js"
+    "send-sms.js",
+    "index.html"
   ],
   "panels": [
     "terminal",
     "browser"
   ],
-  "version": "0.2.1"
+  "version": "0.2.2"
 }
