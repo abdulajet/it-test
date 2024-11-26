@@ -5,7 +5,7 @@
         "setup.json": true,
         "vcr.yml": true,
     },
-    "vs-browser.url": "https://abdulajet.github.io/it-test/tutorials/messages_api-sms/0.2.1",
+    "vs-browser.url": "https://abdulajet.github.io/it-test/tutorials/messages_api-sms/0.2.2",
     "vs-browser.reload.onSave": false,
     "workbench.startupEditor": "none"
 }
