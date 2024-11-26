@@ -68,6 +68,13 @@ jobs:
 
           ls
 
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: "${{ steps.get-changed-folder.outputs.dir }}/preview"
+          publish_branch: gh_pages
+
 
       # - name: Leave comment on PR
       #   uses: actions/github-script@v7
