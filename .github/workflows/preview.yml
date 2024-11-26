@@ -60,11 +60,11 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(dist|tutorial-config.json)
+
           mkdir -p ./preview
           cp -r ./dist/* ./preview
+          mv tutorial-config.json ./preview/
           rm -rf dist
-
-          NAME=$(jq -r '.slug' tutorial-config.json)
 
           ls
 
