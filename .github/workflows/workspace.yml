@@ -63,7 +63,7 @@ jobs:
           mkdir -p ./public
           cp -r ../dist/* ./public
           rm -rf ../dist
-          cp -r $GITHUB_WORKSPACE/scripting/DummyServer/* .
+          cp -r $GITHUB_WORKSPACE/scripting/TemplateServer/* .
 
           NAME=$(jq -r '.slug' ../tutorial-config.json)
           VERSION=$(jq -r '.version' ../tutorial-config.json)
@@ -93,7 +93,7 @@ jobs:
           cd ws
           pwd
           cp ../tutorial-config.json .
-          cp -r $GITHUB_WORKSPACE/scripting/DummyWorkspace/. .
+          cp -r $GITHUB_WORKSPACE/scripting/TemplateWorkspace/. .
           cp $GITHUB_WORKSPACE/scripting/createWorkspace.sh .
           ls -a
           ./createWorkspace.sh ${{ steps.deploy.outputs.url }}
