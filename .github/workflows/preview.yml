@@ -72,7 +72,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          destination_dir: "${{ steps.get-changed-folder.outputs.dir }}"
+          destination_dir: "${{ steps.get-changed-folder.outputs.dir }}/preview"
           publish_dir: "${{ steps.get-changed-folder.outputs.dir }}/preview"
           publish_branch: gh_pages
 
