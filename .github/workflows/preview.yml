@@ -60,12 +60,13 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(dist|tutorial-config.json)
-          mkdir -p ./public
-          cp -r ./dist/* ./public
+          mkdir -p ./preview
+          cp -r ./dist/* ./preview
           rm -rf dist
 
           NAME=$(jq -r '.slug' tutorial-config.json)
 
+          ls
 
 
       # - name: Leave comment on PR
